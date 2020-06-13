@@ -11,8 +11,8 @@
         <directory name="../../src" />
         <directory name="../../samples" />
         <ignoreFiles>
-            <directory name="../../vendor" />
             <directory name="../../bin" />
+            <directory name="../../vendor" />
         </ignoreFiles>
     </projectFiles>
 </psalm>
