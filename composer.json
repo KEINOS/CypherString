@@ -1,9 +1,9 @@
 {
-    "name": "keinos/cypherstring",
+    "name": "keinos/cypher-string",
     "description": "Simple class to encrypt/decrypt a string.(RSA, SHA-512, 4096bit",
     "homepage": "https://github.com/KEINOS/CypherString",
     "type": "library",
-    "license": "Apache-2.0",
+    "license": "MIT",
     "authors": [
         {
             "name": "KEINOS",
