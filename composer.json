@@ -1,7 +1,7 @@
 {
-    "name": "keinos/hello-world-tpl",
-    "description": "Overly cautious CData class. See the repo for details.",
-    "homepage": "https://github.com/KEINOS/TPL-PHP-CData",
+    "name": "keinos/cypherstring",
+    "description": "Simple class to encrypt/decrypt a string.(RSA, SHA-512, 4096bit",
+    "homepage": "https://github.com/KEINOS/CypherString",
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
@@ -12,36 +12,30 @@
             "role": "Maintainer"
         },
         {
-            "name": "tadsan",
-            "homepage": "https://qiita.com/tadsan/items/bf61520eb2d455e0e8b4",
-            "role": "InfluencedBy"
-        },
-        {
             "name": "contributors",
-            "homepage": "https://github.com/KEINOS/TPL-PHP-CData/graphs/contributors",
+            "homepage": "https://github.com/KEINOS/CypherString/graphs/contributors",
             "role": "Contributors"
         }
     ],
     "support": {
-        "issues": "https://github.com/KEINOS/TPL-PHP-CData/issues",
-        "source": "https://github.com/KEINOS/TPL-PHP-CData"
+        "issues": "https://github.com/KEINOS/CypherString/issues",
+        "source": "https://github.com/KEINOS/CypherString"
     },
-    "bin": ["bin/CData"],
     "require": {
         "php": "^8.0 || ^7.1",
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.3",
-        "phan/phan": "^2.5",
-        "php-coveralls/php-coveralls": "^2.2",
+        "bamarni/composer-bin-plugin": "^2.0 || ^1.3",
+        "phan/phan": "^3.0 || ^2.5",
+        "php-coveralls/php-coveralls": "^3.0 || ^2.2",
         "phpbench/phpbench": "@dev",
         "phpmd/phpmd": "@stable",
-        "phpstan/extension-installer": "^1.0",
+        "phpstan/extension-installer": "^2.0 || ^1.0",
         "phpstan/phpstan": "^0.12.10",
-        "phpunit/phpunit": "^9.0 || ^8.0 || ^7.0 || ^6.5",
-        "psalm/phar": "^3.9",
-        "squizlabs/php_codesniffer": "^3.5"
+        "phpunit/phpunit": "^10.0 || ^9.0 || ^8.0 || ^7.0 || ^6.5",
+        "psalm/phar": "^4.0 || ^3.9",
+        "squizlabs/php_codesniffer": "^4.0 || ^3.5"
     },
     "config": {
         "sort-packages": true
