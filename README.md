@@ -1,3 +1,8 @@
+[![](https://travis-ci.org/KEINOS/CypherString.svg?branch=master)](https://travis-ci.org/KEINOS/CypherString "View build status in Travis CI")
+[![Coverage Status](https://coveralls.io/repos/github/KEINOS/CypherString/badge.svg)](https://coveralls.io/github/KEINOS/CypherString)
+[![](https://img.shields.io/scrutinizer/quality/g/KEINOS/CypherString/master)](https://scrutinizer-ci.com/g/KEINOS/CypherString/build-status/master "Code quality at Scrutinizer")
+[![](https://img.shields.io/packagist/php-v/keinos/cypherstring)](https://github.com/KEINOS/CypherString/blob/master/.travis.yml "PHP Version Support")
+
 # Cypher String
 
 Simple PHP class to encrypt/decrypt a string with RSA (SHA-512, 4096 bit).
