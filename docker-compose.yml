@@ -5,6 +5,7 @@ services:
   test:
     build:
       context: .
+      network: host
       dockerfile: ./.testcontainer/Dockerfile
       args:
         - NAME_IMAGE=php:7.4.3-cli-alpine
