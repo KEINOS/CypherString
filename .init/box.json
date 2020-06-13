@@ -1,0 +1,25 @@
+{
+    "base-path": "./",
+    "main": "./src/CypherString.php",
+    "blacklist": [
+        ".devcontainer",
+        ".init",
+        ".testcontainer",
+        ".vscode",
+        "report",
+        "samples",
+        "tests",
+        ".dockerignore",
+        ".gitattributes",
+        ".gitignore",
+        ".phpcs.xml",
+        ".scrutinizer.yml",
+        ".travis.yml",
+        "composer.lock",
+        "docker-compose.yml",
+        "Dockerfile"
+    ],
+    "output": "./bin/CypherString.phar",
+    "force-autodiscovery": true,
+    "shebang": false
+}
