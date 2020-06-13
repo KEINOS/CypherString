@@ -15,7 +15,7 @@ final class BasicTest extends TestCase
         return sys_get_temp_dir() . DIRECTORY_SEPARATOR . self::NAME_FILE_CONF;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $path_file_conf = $this->getPathFileConf();
 

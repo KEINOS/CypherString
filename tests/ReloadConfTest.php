@@ -20,21 +20,21 @@ final class ReloadConfTest extends TestCase
         return sys_get_temp_dir() . DIRECTORY_SEPARATOR . self::NAME_FILE_CONF;
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         // Cache conf data to restore
         $path_file_conf = self::getPathFileConf();
         $this->data_restore = file_get_contents($path_file_conf);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // Restore data
         $path_file_conf = self::getPathFileConf();
         file_put_contents($path_file_conf, $this->data_restore);
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         // Create conf file
         $path_file_conf = self::getPathFileConf();
@@ -42,7 +42,7 @@ final class ReloadConfTest extends TestCase
         unset($sample);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         // Delete conf file
         $path_file_conf = self::getPathFileConf();
