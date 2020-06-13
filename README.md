@@ -7,14 +7,36 @@
 
 Simple PHP class to encrypt/decrypt a string with RSA (SHA-512, 4096 bit).
 
-## Simple Usage
+## Install
 
-By default it encrypts with "public" key and decrypts with "private" key.
+Copy the [source code](https://github.com/KEINOS/CypherString/blob/master/src/CypherString.php) of use "[Composer](https://getcomposer.org/)" to keep up-to-date.
+
+```bash
+composer require keinos/cypher-string
+```
+
+## Usage
 
 ```php
 <?php
 
-require_once('/path/to/class/CypherString.php');
+require_once __DIR__ . '/../src/CypherString.php';
+
+$path_file_conf = '/path/to/my_key_pair.json';
+
+$cypher = new \KEINOS\lib\CypherString($path_file_conf);
+
+$data_raw = 'Sample data';
+$data_enc = $cypher->encrypt($data_raw);
+$data_dec = $cypher->decrypt($data_enc);
+
+echo 'Result enc/dec : ', ($data_raw === $data_dec) ? 'SUCCESS' : 'FAIL', PHP_EOL;
+```
+
+```php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 try {
     $path_file_json = '/path/to/key_pair.json'; // File path to save/load the key pair
@@ -35,7 +57,9 @@ try {
 }
 ```
 
-## Advanced usage
+- [See other sample usages](https://github.com/KEINOS/CypherString/tree/master/samples) @ GitHub
+
+### Advanced usage
 
 - Create key pair with a passphrase
 
@@ -45,3 +69,10 @@ try {
 
   $cypher = new KEINOS\lib\CypherString($path_file_json, $passphrase);
   ```
+
+## Information
+
+- [Licence/MIT](https://github.com/KEINOS/CypherString/blob/master/LICENSE)
+- [Reporitory](https://github.com/KEINOS/CypherString) @ GitHub
+- [Package](https://packagist.org/packages/keinos/cypher-string) @ Packagist
+- [Issues](https://github.com/KEINOS/CypherString/issues) @ GitHub
