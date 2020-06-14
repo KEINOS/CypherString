@@ -4,7 +4,7 @@
  * This class creates a RSA key pair, encrypts and decrypts a string.
  *
  * Usage:
- *    $cypher   = new KEINOS\lib\CypherString('/path/to/keypair.json');
+ *    $cypher   = new KEINOS\lib\CypherString('/path/to/key/pair.json');
  *    $data_enc = $cypher->encrypt('Sample data');
  *    $data_dec = $cypher->decrypt($data_enc);
  * Note:
@@ -60,7 +60,7 @@ final class CypherString
      *
      * @param  string $conf_json    JSON string from conf file.
      * @return array<string,mixed>
-     * @throws \Exception           On any error occured while decoding or missing requirements.
+     * @throws \Exception           On any error occurred while decoding or missing requirements.
      */
     private function decodeJsonConf(string $conf_json): array
     {
@@ -90,7 +90,7 @@ final class CypherString
      * @param  string $data_json
      * @return array<string,mixed>
      * @throws \Exception
-     *     On any error occured while decoding or missing requirements.
+     *     On any error occurred while decoding or missing requirements.
      */
     private function decodeJsonData(string $data_json): array
     {
@@ -122,7 +122,7 @@ final class CypherString
     /**
      * @param  string $data_json  JSON data from encrypt() method with additional data.
      * @return string
-     * @throws \Exception         On any error occured while decryption.
+     * @throws \Exception         On any error occurred while decryption.
      */
     public function decrypt(string $data_json): string
     {
@@ -158,10 +158,10 @@ final class CypherString
     }
 
     /**
-     * @param  string $string      Datas should be Base64 encoded.
-     * @param  string $key_public  Public key in PEM to encrypt. (Option)
-     * @return string              JSON object string of the crypted data and it's envelope key.
-     * @throws \Exception          On any error occured while encryption.
+     * @param  string $string      Data should be Base64 encoded.
+     * @param  string $key_public  Public key in PEM to encrypt. (Optional)
+     * @return string              JSON object string of the encrypted data and it's envelope key.
+     * @throws \Exception          On any error occurred while encryption.
      */
     public function encrypt(string $string, string $key_public = ''): string
     {
@@ -169,7 +169,7 @@ final class CypherString
         $list_key_envelope = [];
         $data_sealed = '';
 
-        // Enctypt/seal data
+        // Encrypt/seal data
         $result = openssl_seal($string, $data_sealed, $list_key_envelope, [$key_public]);
         if ($result === false) {
             throw new \Exception('Failed to encrypt data.');
@@ -236,22 +236,6 @@ final class CypherString
     /**
      * @return string
      */
-    public function getPassphraseDefault(): string
-    {
-        static $hash_file_self;
-        if (isset($hash_file_self)) {
-            return $hash_file_self;
-        }
-        // In PHP 7.1.23 there's a bug that empty pass phrase can't create the
-        // resource ID. So set a default pass phrase if empty.
-        // Ref: Bug #73833 https://bugs.php.net/bug.php?id=73833
-        $hash_file_self = strval(hash_file('md5', __FILE__));
-        return $hash_file_self;
-    }
-
-    /**
-     * @return string
-     */
     public function getPathFileConfig(): string
     {
         return $this->path_file_config;
@@ -262,10 +246,13 @@ final class CypherString
      *
      * @param  string $passphrase (Optional)
      * @return void
-     * @throws \Exception         On any error occured while creating the keys.
+     * @throws \Exception         On any error occurred while creating the keys.
      */
     private function init(string $passphrase = ''): void
     {
+        // Set/generate passphrase (Fix Bug #73833 on PHP 7.1.23)
+        $this->setPassphrase($passphrase);
+
         // Configuration/settings of the key pair
         $this->config_ssl = [
             "digest_alg"       => "sha512",
@@ -273,19 +260,14 @@ final class CypherString
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
         ];
 
-        // Set passphrase
-        // Fix Bug #73833 https://bugs.php.net/bug.php?id=73833 for PHP 7.1.23. No empty passphrase allowed.
-        $passphrase = empty(trim($passphrase)) ? $this->getPassphraseDefault() : trim($passphrase);
-        $this->setPassphrase($passphrase);
-
         // Create the key pair
         $resource = openssl_pkey_new($this->config_ssl);
         if ($resource === false) {
-            throw new \Exception('Failed to create key pair. Probably old SSL module used.');
+            throw new \Exception('Failed to create key pair. Probably old OpenSSL module used.');
         }
 
         // Get and set private key
-        $result = openssl_pkey_export($resource, $key_private, $passphrase);
+        $result = openssl_pkey_export($resource, $key_private, $this->getPassphrase());
         if ($result === false) {
             throw new \Exception('Failed to create key pair.');
         }
@@ -304,7 +286,7 @@ final class CypherString
         }
         $this->key_public = $array['key'];
 
-        // Save the above datas and flag up redy to use
+        // Save the above data and flag up ready to use
         $this->save();
         $this->setFlagAsKeysAvailable(true);
     }
@@ -318,12 +300,12 @@ final class CypherString
     }
 
     /**
-     * Loads the JSON file of SSL datas such as key pair and the passphrase.
+     * Loads the JSON file of SSL data such as key pair and the passphrase.
      *
      * @param  string $path_file_config
      * @return void
      * @throws \Exception
-     *     On any error occured while creating the keys.
+     *     On any error occurred while creating the keys.
      */
     public function load(string $path_file_config): void
     {
@@ -345,7 +327,7 @@ final class CypherString
     }
 
     /**
-     * Saves/overwrites the SSL datas such as key pair and passphrase as JSON file.
+     * Saves/overwrites the SSL data such as key pair and passphrase as JSON file.
      *
      * - NOTE:
      *   BE CAREFUL where to save the data! If the saved file gets public,
@@ -386,6 +368,10 @@ final class CypherString
      */
     public function setPassphrase(string $passphrase): void
     {
+        // In PHP 7.1.23 there's a bug that with an empty pass phrase "openssl_pkey_get_private()"
+        // fails to create the resource ID. So set a default pass phrase if empty.
+        //   - Ref: Bug #73833 https://bugs.php.net/bug.php?id=73833
+        $passphrase = (empty(trim($passphrase))) ? strval(hash_file('md5', __FILE__)) : trim($passphrase);
         $this->passphrase = $passphrase;
     }
 }
