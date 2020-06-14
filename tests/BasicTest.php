@@ -50,4 +50,20 @@ final class BasicTest extends TestCase
 
         $this->assertSame($expect, $actual);
     }
+
+    public function testUseMalformedPassphrase()
+    {
+        $path_file_conf = $this->getPathFileConf();
+        $passphrase = 'this is my pass phrase to use the key pair';
+
+        $sample   = new \KEINOS\lib\CypherString($path_file_conf, $passphrase);
+        $expect   = 'Hello, World!' . hash('md5', strval(time()));
+        $data_enc = $sample->encrypt($expect);
+
+        // Set bad pass phrase
+        $sample->setPassphrase('This is a bad pass phrase');
+
+        $this->expectException(\Exception::class);
+        $actual = $sample->decrypt($data_enc);
+    }
 }
