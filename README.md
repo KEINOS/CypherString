@@ -1,6 +1,5 @@
 [![](https://travis-ci.org/KEINOS/CypherString.svg?branch=master)](https://travis-ci.org/KEINOS/CypherString "View build status in Travis CI")
-[![Coverage Status](https://coveralls.io/repos/github/KEINOS/CypherString/badge.svg)](https://coveralls.io/github/KEINOS/CypherString)
-[![Coverage Status](https://coveralls.io/repos/github/KEINOS/CypherString/badge.svg?branch=%28HEAD+detached+at+c01b91e%29)](https://coveralls.io/github/KEINOS/CypherString?branch=%28HEAD+detached+at+c01b91e%29)
+[![](https://img.shields.io/coveralls/github/KEINOS/CypherString)](https://coveralls.io/github/KEINOS/CypherString "Code Coverage in COVERALLS")
 [![](https://img.shields.io/scrutinizer/quality/g/KEINOS/CypherString/master)](https://scrutinizer-ci.com/g/KEINOS/CypherString/build-status/master "Code quality at Scrutinizer")
 [![](https://img.shields.io/packagist/php-v/keinos/cypher-string)](https://github.com/KEINOS/CypherString/blob/master/.travis.yml "PHP Version Support")
 
