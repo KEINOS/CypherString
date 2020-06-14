@@ -137,8 +137,8 @@ final class CypherString
         $passphrase  = $data['passphrase'];
         $id_resource = openssl_pkey_get_private($key_private, $passphrase);
         if ($id_resource === false) {
-            $msg  = 'Data:' . PHP_EOL . print_r($data, true) . PHP_EOL;
-            throw new \Exception('Failed to decrypt data. Could NOT get resource ID of private key.');
+            $msg  = PHP_EOL . 'Data:' . PHP_EOL . print_r($data, true) . PHP_EOL;
+            throw new \Exception('Failed to decrypt data. Could NOT get resource ID of private key.' . $msg);
         }
 
         // Requirements to decrypt

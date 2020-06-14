@@ -1,7 +1,8 @@
 [![](https://travis-ci.org/KEINOS/CypherString.svg?branch=master)](https://travis-ci.org/KEINOS/CypherString "View build status in Travis CI")
 [![Coverage Status](https://coveralls.io/repos/github/KEINOS/CypherString/badge.svg)](https://coveralls.io/github/KEINOS/CypherString)
+[![Coverage Status](https://coveralls.io/repos/github/KEINOS/CypherString/badge.svg?branch=%28HEAD+detached+at+c01b91e%29)](https://coveralls.io/github/KEINOS/CypherString?branch=%28HEAD+detached+at+c01b91e%29)
 [![](https://img.shields.io/scrutinizer/quality/g/KEINOS/CypherString/master)](https://scrutinizer-ci.com/g/KEINOS/CypherString/build-status/master "Code quality at Scrutinizer")
-[![](https://img.shields.io/packagist/php-v/keinos/cypherstring)](https://github.com/KEINOS/CypherString/blob/master/.travis.yml "PHP Version Support")
+[![](https://img.shields.io/packagist/php-v/keinos/cypher-string)](https://github.com/KEINOS/CypherString/blob/master/.travis.yml "PHP Version Support")
 
 # Cypher String
 
@@ -38,6 +39,8 @@ echo 'Result enc/dec : ', ($data_raw === $data_dec) ? 'SUCCESS' : 'FAIL', PHP_EO
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// Use of "try" and "catch" is recommended. Since the error message might contain the
+// raw data, the passphrase and/or key pair info when an exception was thrown.
 try {
     $path_file_json = '/path/to/key_pair.json'; // File path to save/load the key pair
 
@@ -61,7 +64,7 @@ try {
 
 ### Advanced usage
 
-- Create key pair with a passphrase
+- Create key pair with a pass-phrase.
 
   ```php
   $path_file_json = '/path/to/key_pair.json';
@@ -69,6 +72,7 @@ try {
 
   $cypher = new KEINOS\lib\CypherString($path_file_json, $passphrase);
   ```
+  **Important**: Note that if the pass-phrase is not set or providing an empty string, then it will use the default password. Due to the [bug #73833 of PHP](https://bugs.php.net/bug.php?id=73833) that [occur with PHP 7.1.23 test](https://travis-ci.org/github/KEINOS/CypherString/builds/697941898).
 
 ## Information
 
