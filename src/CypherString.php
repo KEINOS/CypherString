@@ -33,7 +33,7 @@ final class CypherString
     private $flag_keys_available = false;
 
     /**
-     * Instanciate an object from the provided JSON file.
+     * Instantiate an object from the provided JSON file.
      *
      * @param  string $path_file_config  File path of the key pair and configuration in JSON format.
      *                                   It will generate a new one if the file doesn't exist.
