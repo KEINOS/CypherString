@@ -44,15 +44,18 @@ final class CypherString
     {
         $this->path_file_config = $path_file_config;
 
-        // Load existing config file
-        if (file_exists($path_file_config)) {
+        if (! file_exists($path_file_config)) {
+            // Creates a key pair and saves to the provided file path
+            $this->init($passphrase);
+        } else {
+            // Loads the existing key pair
             $this->load($path_file_config);
             $this->setFlagAsKeysAvailable(true);
-            return;
         }
 
-        // Creates a key pair and saves to the provided file path
-        $this->init($passphrase);
+        if (! file_exists($path_file_config)) {
+            throw new \Exception('Failed to save conf file at: ' . $path_file_config);
+        }
     }
 
     /**
