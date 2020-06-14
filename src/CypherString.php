@@ -69,8 +69,8 @@ final class CypherString
     {
         $data = json_decode($conf_json, self::AS_ASSOCIATIVE_ARRAY);
 
-        if (is_null($data)) {
-            throw new \Exception('Failed to decode JSON.' . PHP_EOL . 'JSON: ' . $conf_json);
+        if (empty($data)) {
+            throw new \Exception('Failed to decode JSON. Conf data is empty.');
         }
 
         // Check if $data contains must keys required
@@ -91,7 +91,7 @@ final class CypherString
      * Decodes JSON string from the "encrypt()" method to an array.
      *
      * @param  string $data_json
-     * @return array<string,mixed>
+     * @return array<string>
      * @throws \Exception
      *     On any error occurred while decoding or missing requirements.
      */
@@ -99,7 +99,7 @@ final class CypherString
     {
         $data = json_decode($data_json, self::AS_ASSOCIATIVE_ARRAY);
 
-        if (is_null($data)) {
+        if (empty($data) || ! is_array($data)) {
             throw new \Exception('Malformed JSON string given. Failed to decode JSON string to array.');
         }
 
