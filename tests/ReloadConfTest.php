@@ -15,7 +15,7 @@ final class ReloadConfTest extends TestCase
     private const NAME_FILE_CONF = 'sample_conf.json';
     private $data_restore = '';
 
-    public static function getPathFileConf()
+    public static function getPathFileConf(): string
     {
         return sys_get_temp_dir() . DIRECTORY_SEPARATOR . self::NAME_FILE_CONF;
     }
@@ -53,7 +53,7 @@ final class ReloadConfTest extends TestCase
         }
     }
 
-    public function testReloadExistingConfigurationFile()
+    public function testReloadExistingConfigurationFile(): void
     {
         $path_file_conf = $this->getPathFileConf();
 
@@ -71,7 +71,7 @@ final class ReloadConfTest extends TestCase
         $this->assertNotSame($expect, $data_enc);
     }
 
-    public function testReloadExistingMalformedConfigurationFile()
+    public function testReloadExistingMalformedConfigurationFile(): void
     {
         $path_file_conf = $this->getPathFileConf();
 

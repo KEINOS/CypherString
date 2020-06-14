@@ -10,7 +10,7 @@ final class IrregularInputTest extends TestCase
 {
     private const NAME_FILE_CONF = 'sample_conf.json';
 
-    private function getPathFileConf()
+    private function getPathFileConf(): string
     {
         return sys_get_temp_dir() . DIRECTORY_SEPARATOR . self::NAME_FILE_CONF;
     }
@@ -24,7 +24,7 @@ final class IrregularInputTest extends TestCase
         }
     }
 
-    public function testInteger()
+    public function testInteger(): void
     {
         $path_file_conf = $this->getPathFileConf();
 
