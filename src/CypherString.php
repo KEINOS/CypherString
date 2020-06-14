@@ -44,30 +44,37 @@ final class CypherString
     {
         $this->path_file_config = $path_file_config;
 
-        // Load existing config file
-        if (file_exists($path_file_config)) {
-            $this->load($path_file_config);
-            $this->setFlagAsKeysAvailable(true);
-            return;
+        if (! file_exists($path_file_config)) {
+            // Creates a key pair and saves to the provided file path
+            $this->init($passphrase);
         }
 
-        // Creates a key pair and saves to the provided file path
-        $this->init($passphrase);
+        if (file_exists($path_file_config)) {
+            // Load existing config file
+            $this->load($path_file_config);
+            $this->setFlagAsKeysAvailable(true);
+        } else {
+            throw new \Exception('Failed to instantiate at: ' . $path_file_config);
+        }
     }
 
     /**
      * Decodes JSON string from the configuration file to an array.
      *
      * @param  string $conf_json    JSON string from conf file.
-     * @return array<string,mixed>
+     * @return array<array>
      * @throws \Exception           On any error occurred while decoding or missing requirements.
      */
     private function decodeJsonConf(string $conf_json): array
     {
         $data = json_decode($conf_json, self::AS_ASSOCIATIVE_ARRAY);
 
-        if (is_null($data)) {
+        if (empty($data)) {
             throw new \Exception('Failed to decode JSON.' . PHP_EOL . 'JSON: ' . $conf_json);
+        }
+
+        if (! is_array($data)) {
+            throw new \Exception('Failed to decode JSON as an array.' . PHP_EOL . 'JSON: ' . $conf_json);
         }
 
         // Check if $data contains must keys required
@@ -88,7 +95,7 @@ final class CypherString
      * Decodes JSON string from the "encrypt()" method to an array.
      *
      * @param  string $data_json
-     * @return array<string,mixed>
+     * @return array<array>
      * @throws \Exception
      *     On any error occurred while decoding or missing requirements.
      */
@@ -96,8 +103,12 @@ final class CypherString
     {
         $data = json_decode($data_json, self::AS_ASSOCIATIVE_ARRAY);
 
-        if (is_null($data)) {
-            throw new \Exception('Malformed JSON string given. Failed to decode JSON string to array.');
+        if (empty($data)) {
+            throw new \Exception('Empty JSON string given. Failed to decode JSON string to array.');
+        }
+
+        if (! is_array($data)) {
+            throw new \Exception('Failed to decode JSON string to an array.');
         }
 
         // Verify basic requirements
@@ -133,8 +144,8 @@ final class CypherString
         $data = $this->decodeJsonData($data_json);
 
         // Get resource id of the key
-        $key_private = $data['key_private_pem'];
-        $passphrase  = $data['passphrase'];
+        $key_private = strval($data['key_private_pem']);
+        $passphrase  = strval($data['passphrase']);
         $id_resource = openssl_pkey_get_private($key_private, $passphrase);
         if ($id_resource === false) {
             $msg  = PHP_EOL . 'Data:' . PHP_EOL . print_r($data, true) . PHP_EOL;
@@ -142,9 +153,9 @@ final class CypherString
         }
 
         // Requirements to decrypt
-        $data_sealed    = $data['data_sealed'];
+        $data_sealed    = strval($data['data_sealed']);
         $data_decrypted = '';
-        $data_encrypted = $data['data_encrypted'];
+        $data_encrypted = strval($data['data_encrypted']);
 
         // Decrypt data
         $result = openssl_open($data_sealed, $data_decrypted, $data_encrypted, $id_resource);
@@ -320,10 +331,10 @@ final class CypherString
         $data = $this->decodeJsonConf($json);
 
         // Re-dump properties.
-        $this->key_private = $data['key_private'];
-        $this->key_public  = $data['key_public'];
-        $this->passphrase  = $data['passphrase'];
-        $this->config_ssl  = $data['config_ssl'];
+        $this->key_private = strval($data['key_private']);
+        $this->key_public  = strval($data['key_public']);
+        $this->passphrase  = strval($data['passphrase']);
+        $this->config_ssl  = (array) $data['config_ssl'];
     }
 
     /**

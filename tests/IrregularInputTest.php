@@ -24,7 +24,17 @@ final class IrregularInputTest extends TestCase
         }
     }
 
-    public function testInteger(): void
+    public function testDecryptANullValue(): void
+    {
+        $path_file_conf = $this->getPathFileConf();
+
+        $sample = new \KEINOS\lib\CypherString($path_file_conf);
+
+        $this->expectException(\ArgumentCountError::class);
+        $data_enc = $sample->decrypt();
+    }
+
+    public function testEncryptAnInteger(): void
     {
         $path_file_conf = $this->getPathFileConf();
 
@@ -33,5 +43,39 @@ final class IrregularInputTest extends TestCase
         $expect = intval(1);
         $this->expectException(\TypeError::class);
         $data_enc = $sample->encrypt($expect);
+    }
+
+    public function testEncryptANullValue(): void
+    {
+        $path_file_conf = $this->getPathFileConf();
+
+        $sample = new \KEINOS\lib\CypherString($path_file_conf);
+
+        $this->expectException(\ArgumentCountError::class);
+        $data_enc = $sample->encrypt();
+    }
+
+    public function testInstantiateWithNoFilePath(): void
+    {
+        $path_file_conf = $this->getPathFileConf();
+
+        $this->expectException(\ArgumentCountError::class);
+        $sample = new \KEINOS\lib\CypherString();
+    }
+
+    public function testUseMalformedPassphrase(): void
+    {
+        $path_file_conf = $this->getPathFileConf();
+        $passphrase = 'this is my pass phrase to use the key pair';
+
+        $sample   = new \KEINOS\lib\CypherString($path_file_conf, $passphrase);
+        $expect   = 'Hello, World!' . hash('md5', strval(time()));
+        $data_enc = $sample->encrypt($expect);
+
+        // Set bad pass phrase
+        $sample->setPassphrase('This is a bad pass phrase');
+
+        $this->expectException(\Exception::class);
+        $actual = $sample->decrypt($data_enc);
     }
 }
