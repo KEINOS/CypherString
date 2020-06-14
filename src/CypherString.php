@@ -25,7 +25,7 @@ final class CypherString
     private $key_private;
     /** @var string $key_public */
     private $key_public;
-    /** @var string p$assphrase */
+    /** @var string $passphrase */
     private $passphrase;
     /** @var string $path_file_config */
     private $path_file_config;
@@ -137,7 +137,8 @@ final class CypherString
         $passphrase  = $data['passphrase'];
         $id_resource = openssl_pkey_get_private($key_private, $passphrase);
         if ($id_resource === false) {
-            throw new \Exception('Failed to decrypt data. Could NOT get the ID of private key.');
+            $msg  = 'Data:' . PHP_EOL . print_r($data, true) . PHP_EOL;
+            throw new \Exception('Failed to decrypt data. Could NOT get resource ID of private key.');
         }
 
         // Requirements to decrypt
@@ -171,7 +172,7 @@ final class CypherString
         // Enctypt/seal data
         $result = openssl_seal($string, $data_sealed, $list_key_envelope, [$key_public]);
         if ($result === false) {
-            throw new \Exception('Failed to enrypt data.');
+            throw new \Exception('Failed to encrypt data.');
         }
 
         // Get envelope key
@@ -235,6 +236,22 @@ final class CypherString
     /**
      * @return string
      */
+    public function getPassphraseDefault(): string
+    {
+        static $hash_file_self;
+        if (isset($hash_file_self)) {
+            return $hash_file_self;
+        }
+        // In PHP 7.1.23 there's a bug that empty pass phrase can't create the
+        // resource ID. So set a default pass phrase if empty.
+        // Ref: Bug #73833 https://bugs.php.net/bug.php?id=73833
+        $hash_file_self = strval(hash_file('md5', __FILE__));
+        return $hash_file_self;
+    }
+
+    /**
+     * @return string
+     */
     public function getPathFileConfig(): string
     {
         return $this->path_file_config;
@@ -255,6 +272,11 @@ final class CypherString
             "private_key_bits" => 4096,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
         ];
+
+        // Set passphrase
+        // Fix Bug #73833 https://bugs.php.net/bug.php?id=73833 for PHP 7.1.23. No empty passphrase allowed.
+        $passphrase = empty(trim($passphrase)) ? $this->getPassphraseDefault() : trim($passphrase);
+        $this->setPassphrase($passphrase);
 
         // Create the key pair
         $resource = openssl_pkey_new($this->config_ssl);
@@ -281,9 +303,6 @@ final class CypherString
             throw new \Exception('Failed to get public key.');
         }
         $this->key_public = $array['key'];
-
-        // Set passphrase
-        $this->passphrase = $passphrase;
 
         // Save the above datas and flag up redy to use
         $this->save();
