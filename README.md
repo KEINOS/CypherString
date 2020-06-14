@@ -10,7 +10,7 @@ Simple PHP class to encrypt/decrypt a string with RSA (SHA-512, 4096 bit).
 
 ## Install
 
-Copy the [source code](https://github.com/KEINOS/CypherString/blob/master/src/CypherString.php) of use "[Composer](https://getcomposer.org/)" to keep up-to-date.
+Copy the [source code](https://github.com/KEINOS/CypherString/blob/master/src/CypherString.php) or use "[Composer](https://getcomposer.org/)" to keep the source up-to-date.
 
 ```bash
 composer require keinos/cypher-string
@@ -42,7 +42,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // Use of "try" and "catch" is recommended. Since the error message might contain the
 // raw data, the passphrase and/or key pair info when an exception was thrown.
 try {
-    $path_file_json = '/path/to/key_pair.json'; // File path to save/load the key pair
+    // File path of the key pair. It will be created if the file doesn't exist.
+    $path_file_json = '/path/to/key_pair.json';
 
     // Creates or loads the key pair info file and instantiates the class object
     $cypher = new KEINOS\lib\CypherString($path_file_json);
@@ -51,6 +52,7 @@ try {
     $data_enc = $cypher->encrypt($data_raw); // Encrypt data
     $data_dec = $cypher->decrypt($data_enc); // Decrypt data
 
+    // View results
     echo 'Result enc/dec : ', ($data_raw === $data_dec) ? 'SUCCESS' : 'FAIL', PHP_EOL;
     echo 'Public Key     : ', $cypher->getKeyPublic(), PHP_EOL;
     echo 'Private Key    : ', $cypher->getKeyPrivate(), PHP_EOL;
