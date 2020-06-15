@@ -10,7 +10,7 @@ namespace KEINOS\Tests;
 
 use KEINOS\Tests\TestCase;
 
-final class decodeJsonDataTest extends TestCase
+final class DecodeJsonDataTest extends TestCase
 {
     private const PASSPHRASE = 'this is my pass phrase to use the key pair';
     private const NAME_FILE_CONF = 'sample_conf.json';
@@ -45,7 +45,7 @@ final class decodeJsonDataTest extends TestCase
     }
     public function testArrayArgument(): void
     {
-        $data = ['sample'=>'sample'];
+        $data = ['sample' => 'sample'];
         $this->expectException(\TypeError::class);
         $result = $this->decodeJsonData->invoke($this->object, $data);
     }
