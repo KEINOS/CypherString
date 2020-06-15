@@ -14,8 +14,8 @@
  *      decrypted with the same script and conf file.
  *
  * Current quality before push
- *   - code_quality 9.69
- *   - coveralls 85.22
+ *   - code_quality 8.7
+ *   - coveralls 86.32
  */
 
 declare(strict_types=1);

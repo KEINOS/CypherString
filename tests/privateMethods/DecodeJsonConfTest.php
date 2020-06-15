@@ -30,6 +30,13 @@ final class DecodeJsonConfTest extends TestCase
         $this->decodeJsonConf->setAccessible(true);
     }
 
+    public function testArrayArgument(): void
+    {
+        $data = ['sample' => 'sample'];
+        $this->expectException(\TypeError::class);
+        $result = $this->decodeJsonConf->invoke($this->object, $data);
+    }
+
     public function testEmptyArgument(): void
     {
         $data = '';
@@ -42,12 +49,6 @@ final class DecodeJsonConfTest extends TestCase
         $data = 1;
         $this->expectException(\Exception::class);
         $result = $this->decodeJsonConf->invoke($this->object, intval($data));
-    }
-    public function testArrayArgument(): void
-    {
-        $data = ['sample' => 'sample'];
-        $this->expectException(\TypeError::class);
-        $result = $this->decodeJsonConf->invoke($this->object, $data);
     }
 
     public function testMustKeyKeyPrivateMissingInArgument(): void
