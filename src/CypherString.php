@@ -8,7 +8,14 @@
  *    $data_enc = $cypher->encrypt('Sample data');
  *    $data_dec = $cypher->decrypt($data_enc);
  * Note:
- *    Be aware to be compatible with PHP 7.1 or higher.
+ *    - Be aware that this script should be compatible with PHP 7.1 or higher.
+ *    - The encrypted data is not compatible with other languages or
+ *      decrypt-able with "openssl" command. The encrypted data should be
+ *      decrypted with the same script and conf file.
+ *
+ * Current quality before push
+ *   - code_quality 9.69
+ *   - coveralls 85.22
  */
 
 declare(strict_types=1);
@@ -35,9 +42,12 @@ final class CypherString
     /**
      * Instantiate an object from the provided JSON file.
      *
-     * @param  string $path_file_config  File path of the key pair and configuration in JSON format.
-     *                                   It will generate a new one if the file doesn't exist.
-     * @param  string $passphrase        The passphrase to use the key pair. (Optional)
+     * @param  string $path_file_config  File path of the key pair and configuration.
+     *                                   If the file doesn't exist it will generate
+     *                                   a new one. The file should be in JSON format.
+     * @param  string $passphrase        The pass phrase to use the key pair. (Optional)
+     *                                   If the pass phrase is empty then it will
+     *                                   generate from the hash value of this script.
      * @return void
      */
     public function __construct(string $path_file_config, string $passphrase = '')
@@ -84,6 +94,10 @@ final class CypherString
             throw new \Exception('Missing information in JSON config file.');
         }
 
+        if (! is_array($data['config_ssl'])) {
+            throw new \Exception('Data of "config_ssl" should be an array.');
+        }
+
         return $data;
     }
 
@@ -94,8 +108,6 @@ final class CypherString
      * @return array<string>
      * @throws \Exception
      *     On any error occurred while decoding or missing requirements.
-     * @code_quality 9.69
-     * @coveralls 82.3
      */
     private function decodeJsonData(string $data_json): array
     {
